@@ -31,7 +31,7 @@ void loop() {
   char Ingreso = teclado.getKey();
 
   if (Ingreso){
-     Serial.print(Pasword);
+    Serial.print(Pasword);
     Serial.print("INGRESE LA CONTRASEA: ");
     Serial.print("tecla ingresada: ");
     Serial.print(Ingreso);
