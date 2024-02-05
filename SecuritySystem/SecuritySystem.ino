@@ -4,6 +4,11 @@
 const byte Filas = 4; //tamaño de filas keypad
 const byte Columnas = 4; //tamaño de columnas keypad
 
+//LED DE ADVERTENCIA ERRORES EN CONTRASEÑA
+const int ledPin1 = 7;
+const int ledPin2 = 12;
+const int ledPin3 = 13;
+
 char Teclado[Filas][Columnas] = {
 
 {'7','8','9','A'},
@@ -29,7 +34,11 @@ String Pasword = "AC6C124"; //CONTRASEÑA POR DEFECTO DEL SISTEMA
 
 
 void setup() {
-  
+
+  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin2, OUTPUT);
+  pinMode(ledPin3, OUTPUT);
+
   Serial.begin(9600);
 
 }
@@ -45,7 +54,11 @@ void loop() {
     Entradas +=1;
   }
 
-  if (Ingreso){ //COMPROBACION DE QUE NO SE HA INGRESADO NADA DENTRO DE LA VARIABLE
+  while (true){
+
+    Ingreso = teclado.getKey();
+
+    if (Ingreso){ //COMPROBACION DE QUE NO SE HA INGRESADO NADA DENTRO DE LA VARIABLE
 
     if (Ingreso == '#'){ //UTILIZANDO EL SIGNO * COMO ENTER PARA PODER INGRESAR CONTRASEÑA
       Serial.println();
@@ -58,6 +71,9 @@ void loop() {
         while (salida){
 
           char key = teclado.getKey();
+
+          //EN TEORIA AQUI VA EL CODIGO DE LA CALCULADORA :)
+
           if (key == '*') { // cambio de contraseña
             Serial.print("INGRESE NUEVA CONTRASEÑA: ");
 
@@ -66,15 +82,15 @@ void loop() {
             while (true) {
               key = teclado.getKey();
 
-              if (key == '#') {
-                if (Pasword.length() >= 6 && Pasword.length() <= 8) {
+              if (key == '#') { //ACEPTAR NUEVA CONTRASEÑA
+                if (Pasword.length() >= 6 && Pasword.length() <= 8) { //COMPROBACION TAMAÑO CORRECTO DE LA NUEVA CONTRASEÑA
                   Serial.println();
-                  Serial.println("Nueva Contraseña: " + Pasword);
-                  break;
+                  Serial.println("Nueva Contraseña: " + Pasword); //MOSTRAR CAMBIO DE CONTRASEÑA
+                  break; //SALIR DEL BUCLE DE CREADO CONTRASEÑA
                 } else {
                   Serial.println();
-                  Serial.println("TAMAÑO DE LA CONTRASEÑA INCORRECTO!");
-                  Serial.println("Longitud actual: " + String(Pasword.length()));
+                  Serial.println("TAMAÑO DE LA CONTRASEÑA INCORRECTO!"); //AVISO DE CONTRASEÑA INCORRECTA
+                  Serial.println("Longitud actual: " + String(Pasword.length())); //MOSTRAR TAMAÑO CONTRASEÑA
                 }
               } else if (key != NO_KEY) {
                 Pasword += key; // Solo concatenar si se presiona una tecla válida
@@ -85,16 +101,40 @@ void loop() {
             salida = false;
           }
           
-        }
-        
-        
+        }    
 
       }else{
         Serial.println("CONTRASEÑA INGRESADA ES INCORRECTA!"); //AVISO CONTRASEÑA INCORRECTA
         IntentosEntrada +=1; //AUMENTO DE INTENTO ENTRADAS
-        Serial.print("INGRESE LA CONTRASEA: ");
-      }
-        
+
+        if (IntentosEntrada == 1){
+          
+          digitalWrite(ledPin1, HIGH);//encender led
+
+        }else if (IntentosEntrada == 2){
+
+          digitalWrite(ledPin2, HIGH);
+
+        }else if (IntentosEntrada == 3){
+
+          digitalWrite(ledPin3, HIGH);
+
+          Serial.println("NIÑO MALO, TE TOCA ESPERAR 15 SEGUNDOS >:) ");
+
+          delay(15000); //TIEMPO ENSEPERA DE MALAL CONTRASEÑA
+          
+          digitalWrite(ledPin1, LOW); //APAGAR EL LED
+          digitalWrite(ledPin2, LOW);
+          digitalWrite(ledPin3, LOW);
+
+          IntentosEntrada = 0; //reinicio intentos de entrar en el sistema
+
+          
+
+        }
+
+        Serial.println("INGRESE LA CONTRASEA: ");
+      }      
 
       Entrada =""; //LIMPIEZA DE VARIABLE DE CONTRASEÑA 
     } else{
@@ -102,10 +142,11 @@ void loop() {
       Serial.print("*"); //MOSTRAR DATO INGRESADO DE MANERA INCOGNITA
     }
     
-    
 
+  }
 
 
   }
+  
   
 }
