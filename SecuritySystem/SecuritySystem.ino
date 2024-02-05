@@ -9,6 +9,11 @@ const int ledPin1 = 7;
 const int ledPin2 = 12;
 const int ledPin3 = 13;
 
+//SWITCH PARA VERIFICAR EL ESTADO DE CALCULADORA 
+const int switchPin = 6;  // Define el pin al que está conectado el switch
+int switchState = 0;      // Variable para almacenar el estado del switch
+int lastSwitchState = 0;  // Variable para almacenar el estado anterior del switch
+
 char Teclado[Filas][Columnas] = {
 
 {'7','8','9','A'},
@@ -35,9 +40,11 @@ String Pasword = "AC6C124"; //CONTRASEÑA POR DEFECTO DEL SISTEMA
 
 void setup() {
 
-  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin1, OUTPUT); //Configura los led de señal advertencia
   pinMode(ledPin2, OUTPUT);
   pinMode(ledPin3, OUTPUT);
+
+  pinMode(switchPin, INPUT);  // Configura el pin del switch como entrada
 
   Serial.begin(9600);
 
@@ -72,7 +79,22 @@ void loop() {
 
           char key = teclado.getKey();
 
-          //EN TEORIA AQUI VA EL CODIGO DE LA CALCULADORA :)
+          switchState = digitalRead(switchPin);  // Lee el estado actual del switch
+
+            // Verifica si el estado del switch ha cambiado
+            if (switchState != lastSwitchState) {
+              // Si el switch ha sido presionado, Cambia el estado a calculadora
+              if (switchState == HIGH) {
+
+                //CONDIGO DE LA CALCULADORA HERE!!!!!!
+
+              }
+              delay(50);  // Retardo pequeño para evitar rebotes del switch
+            }
+
+            // Almacena el estado actual del switch para la próxima iteración
+            lastSwitchState = switchState;
+          
 
           if (key == '*') { // cambio de contraseña
             Serial.print("INGRESE NUEVA CONTRASEÑA: ");
