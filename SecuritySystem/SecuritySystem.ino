@@ -19,7 +19,13 @@ Keypad teclado = Keypad(makeKeymap(Teclado), Fpines, Cpines, Filas, Columnas); /
 
 String Entrada; //variable para capturar la contraseña ingresada
 
-int Entradas = 1; //cantidad de veces entrando al sistema
+int Entradas = 0; //cantidad de veces entrando al sistema
+
+int IntentosEntrada = 0; //Intentos entrar en el sistema fallidos
+
+bool salida = true;
+
+String Pasword = "AC6C124"; //CONTRASEÑA POR DEFECTO DEL SISTEMA
 
 
 void setup() {
@@ -30,12 +36,10 @@ void setup() {
 
 void loop() {
   
-
-  String Pasword = "AC6C124"; //CONTRASEÑA POR DEFECTO DEL SISTEMA
   
   char Ingreso = teclado.getKey(); // VARIABLE QUE CAPTURA LA ENTRADA DE CARACTERES POR MEDIO DEL KEYPAD
 
-  if (Entradas == 1){ //MENSAJE DE BIENVENIDA AL USUARIO
+  if (Entradas == 0){ //MENSAJE DE BIENVENIDA AL USUARIO
     Serial.println("||----BIENVENIDO USUARIO DEL GRUPO 6----||");
     Serial.print("INGRESE LA CONTRASEA: ");
     Entradas +=1;
@@ -43,13 +47,59 @@ void loop() {
 
   if (Ingreso){ //COMPROBACION DE QUE NO SE HA INGRESADO NADA DENTRO DE LA VARIABLE
 
-    if (Ingreso == '*'){ //UTILIZANDO EL SIGNO * COMO ENTER PARA PODER INGRESAR CONTRASEÑA
+    if (Ingreso == '#'){ //UTILIZANDO EL SIGNO * COMO ENTER PARA PODER INGRESAR CONTRASEÑA
       Serial.println();
       Serial.print("CONTRASEÑA INGRESADA: ");
-      Serial.println(Entrada);   
+      Serial.println(Entrada);
+      
+      if (Entrada == Pasword){
+        Serial.println("||---- BIENVENIDO!----||"); //SI LA CONTRASEÑA ES CORRECTA DA MENSAJE DE BIENVENIDA
+        
+        while (salida){
+
+          char key = teclado.getKey();
+          if (key == '*') { // cambio de contraseña
+            Serial.print("INGRESE NUEVA CONTRASEÑA: ");
+
+            Pasword = ""; // limpiar la nueva contraseña
+
+            while (true) {
+              key = teclado.getKey();
+
+              if (key == '#') {
+                if (Pasword.length() >= 6 && Pasword.length() <= 8) {
+                  Serial.println();
+                  Serial.println("Nueva Contraseña: " + Pasword);
+                  break;
+                } else {
+                  Serial.println();
+                  Serial.println("TAMAÑO DE LA CONTRASEÑA INCORRECTO!");
+                  Serial.println("Longitud actual: " + String(Pasword.length()));
+                }
+              } else if (key != NO_KEY) {
+                Pasword += key; // Solo concatenar si se presiona una tecla válida
+                Serial.print(key);
+              }
+            }
+
+            salida = false;
+          }
+          
+        }
+        
+        
+
+      }else{
+        Serial.println("CONTRASEÑA INGRESADA ES INCORRECTA!"); //AVISO CONTRASEÑA INCORRECTA
+        IntentosEntrada +=1; //AUMENTO DE INTENTO ENTRADAS
+        Serial.print("INGRESE LA CONTRASEA: ");
+      }
+        
+
+      Entrada =""; //LIMPIEZA DE VARIABLE DE CONTRASEÑA 
     } else{
       Entrada += String(Ingreso); //INGRESO DE CONTRASEÑA A CADENA DE TEXTO
-      Serial.print(Ingreso); //MOSTRAR DATO INGRESSADO
+      Serial.print("*"); //MOSTRAR DATO INGRESADO DE MANERA INCOGNITA
     }
     
     
