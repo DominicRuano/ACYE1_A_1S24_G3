@@ -224,7 +224,7 @@ uint16_t scrollPause = 0;
 <img src="./Practica1_code/assets/result.PNG">
 </div>
 
->#####Actualizacion de la matriz LEDS:
+>##### Actualizacion de la matriz LEDS:
 >En nuestro bucle principal loop se actualiza continuamente la animación de la matriz de LEDS, y se procesan la nuevas entradas de mensajes y teclado para poder mostrarlas en la matriz.
 
 ```Codigo:
