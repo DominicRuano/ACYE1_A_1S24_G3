@@ -9,8 +9,10 @@
 ```js
 1. Dominic Juan Pablo Ruano Perez🧑‍💻
    - 202200075 🆔
-2. Copiar esto y poner su info
-   - carne
+2. River Anderson Ismalej Roman
+   - 2021000096 🆔
+3. Copiar esto y poner su info
+   - carne 🆔
 ```
 
 ---
@@ -30,11 +32,16 @@
 
 **<center>Introduccion</center>**
 
-Este manual técnico ofrece una exposición completa del sistema de seguridad y calculadora desarrollado mediante la plataforma Arduino. Este sistema representa una convergencia entre seguridad y funcionalidad, presentando una solución integral que garantiza tanto la protección como la capacidad de cálculo en un entorno determinado.
+<div style='text-align: justify;'>
 
-La primera fase de este sistema se concentra en el establecimiento de un mecanismo de seguridad robusto. La autenticación se basa en una contraseña compuesta por caracteres alfanuméricos específicos, lo que garantiza un nivel de protección adecuado. Además, se han integrado medidas adicionales de seguridad, como la gestión de intentos fallidos y un protocolo de bloqueo temporal en respuesta a múltiples intentos incorrectos.
+- Este manual técnico ofrece una exposición completa del sistema de seguridad y calculadora desarrollado mediante la plataforma Arduino. Este sistema representa una convergencia entre seguridad y funcionalidad, presentando una solución integral que garantiza tanto la protección como la capacidad de cálculo en un entorno determinado.
 
-La segunda etapa de este proyecto incorpora una funcionalidad de calculadora, proporcionando al usuario la capacidad de realizar operaciones matemáticas básicas. Este componente está diseñado para aceptar números enteros con signo y facilita la ejecución de operaciones de suma, resta, multiplicación y división mediante un teclado matricial.
+- La primera fase de este sistema se concentra en el establecimiento de un mecanismo de seguridad robusto. La autenticación se basa en una contraseña compuesta por caracteres alfanuméricos específicos, lo que garantiza un nivel de protección adecuado. Además, se han integrado medidas adicionales de seguridad, como la gestión de intentos fallidos y un protocolo de bloqueo temporal en respuesta a múltiples intentos incorrectos.
+
+- La segunda etapa de este proyecto incorpora una funcionalidad de calculadora, proporcionando al usuario la capacidad de realizar operaciones matemáticas básicas. Este componente está diseñado para aceptar números enteros con signo y facilita la ejecución de operaciones de suma, resta, multiplicación y división mediante un teclado matricial.
+
+</div>
+
 
 ---
 
@@ -87,7 +94,7 @@ El sistema se basa en la plataforma Arduino y utiliza una serie de componentes e
 >   - Soporte para mostrar texto y sus animaciones.
 >   - Personalización de velocidad, dirección y efectos de desplazamiento.
 >   - Facilidad de integración con microcontroladores compatibles con Arduino.
->> #### chip controlador MAX7219
+>> #### Chip controlador MAX7219
 >> Utiliza una técnica de multiplexado para controlar múltiples LED utilizando un número mínimo de pines de salida del microcontrolador, Se comunica con el microcontrolador a través de una interfaz en serie, lo que facilita su integración con una amplia gama de microcontroladores como Arduino.
 >> - <img src="https://i.ibb.co/XF7Z088/image.png">
 >
@@ -121,10 +128,123 @@ El sistema se basa en la plataforma Arduino y utiliza una serie de componentes e
 > La funcion PrintInMatrix implementa un bucle por el cual se imprime o muestra en las matrices el string que se le envio por parametro y retorna void al detectar que se termino de mostrar el texto.
 >
 > ---
->
+>---
 >*<center>Impresión en Matrices</center>*
->(aquí explicar tanto las conexiones en proteus como el codigo)
-> 
+>>La impresion LED en matrices se logra mediante el control preciso de una serie de LEDS, dipuestos en una matriz. En esta practica usamos como libreria MD_Parola y MD_MAX72xx para manejar la impresion en una matriz de LEDS.
+
+<div div style='text-align: center;'>
+<img src="./Practica1_code/assets/leds.PNG">
+</div>
+
+>#####Inicializacion de la matriz LEDS:
+>Se define el hadware y se inicaliza la matriz de LEDS, con la funcion MD_Parolay MD_MAX72xx. Se especifican los pines para el reloj(CLK_PIN), datos(DATA_PIN) y de chip (CS_PIN).
+
+```Codigo:
+>MD_Parola P = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
+```
+>#####Definicion de la animacion y velocidad de desplazamiento:
+>Se definen los parametros de velocidad para el desplazamiento del resultado (scrollSpeed), el efecto de desplazamiento (scrollSpeed)la pausa del desplazamiento y la alinación del texto.
+
+```Codigo:
+>uint8_t scrollSpeed = 100;    
+textEffect_t scrollEffect = PA_SCROLL_LEFT;
+textPosition_t scrollAlign = PA_LEFT;
+uint16_t scrollPause = 0;
+```
+>#####Lectura de la entrada serial:
+>Se lee la entrada serial para recibir mensaje que se mostrarán en la matriz de LEDS.
+
+```Codigo:
+>void readSerial(void)
+{
+  static char *cp = newMessage;
+
+  while (Serial.available())
+  {
+    *cp = (char)Serial.read();
+    if ((*cp == '\n') || (cp - newMessage >= BUF_SIZE-2)) 
+    {
+      *cp = '\0';
+      cp = newMessage;
+      newMessageAvailable = true;
+    }
+    else 
+      cp++;
+  }
+}
+```
+<div div style='text-align: center;'>
+<img src="./Practica1_code/assets/captureSerial.PNG">
+</div>
+
+>#####Manejo de le entrada del teclado:
+>Se utiliza la biblioteca Keypad para leer los datos de un teclado matricial 4*4. Se construye una expresion matematica a partir de la entrada del teclado y se evalúa para mostrar el resultado en la matriz LEDS.
+
+```Codigo:
+>void readKeypad(void){
+  if (millis() - resultDisplayTime < 30000) {
+    return;
+  }
+
+  char key = keypad.getKey();
+  if (key){
+    Serial.print(key);
+    switch(key) {
+      case '0'...'9':
+        expr += key;
+        break;
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+        expr += String(" ") + key + String(" ");
+        break;
+      case '=':
+        error = false;
+        int result = evaluateExpression(expr);
+        expr = "";
+        if (!error) {
+          String resultString = "RESULTADO = " + String(result);
+          resultString.toCharArray(newMessage, BUF_SIZE);
+        }
+        newMessageAvailable = true;
+        resultDisplayTime = millis();
+        break;
+      case 'C':
+        expr = "";
+        P.displayClear();
+        newMessage[0] = '\0'; 
+        newMessageAvailable = false; 
+        break;
+    }
+  }
+}
+```
+<div div style='text-align: center;'>
+<img src="./Practica1_code/assets/result.PNG">
+</div>
+
+>#####Actualizacion de la matriz LEDS:
+>En nuestro bucle principal loop se actualiza continuamente la animación de la matriz de LEDS, y se procesan la nuevas entradas de mensajes y teclado para poder mostrarlas en la matriz.
+
+```Codigo:
+>void loop()
+{
+  #if USE_UI_CONTROL
+    doUI();
+  #endif 
+  if (P.displayAnimate())
+  {
+    P.displayReset();
+    if (newMessageAvailable)
+    {
+      strcpy(curMessage, newMessage);
+      newMessageAvailable = false;
+      P.displayText(curMessage, scrollAlign, scrollSpeed, scrollPause, scrollEffect, scrollEffect);
+    }
+  }
+}
+```
 > ---
 >
 >*<center>Impresión en consola</center>*
