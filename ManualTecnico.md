@@ -15,7 +15,7 @@
 
 ---
 
-> ###**<center>Objetivos</center>**
+> **<center>Objetivos</center>**
 >
 >- General
 >   -  Que el estudiante interactúe con el microcontrolador arduino 
@@ -28,7 +28,7 @@
 
 ---
 
-###**<center>Introduccion</center>**
+**<center>Introduccion</center>**
 
 Este manual técnico ofrece una exposición completa del sistema de seguridad y calculadora desarrollado mediante la plataforma Arduino. Este sistema representa una convergencia entre seguridad y funcionalidad, presentando una solución integral que garantiza tanto la protección como la capacidad de cálculo en un entorno determinado.
 
@@ -38,33 +38,33 @@ La segunda etapa de este proyecto incorpora una funcionalidad de calculadora, pr
 
 ---
 
-###**<center>Especificaciones del hardware</center>**
+**<center>Especificaciones del hardware</center>**
 
 El sistema se basa en la plataforma Arduino y utiliza una serie de componentes específicos para su operación. A continuación, se detallan las especificaciones del hardware necesario:
 
-> #####**<center>Plataforma Arduino</center>**
+> **<center>Plataforma Arduino</center>**
 >Se requiere una placa Arduino compatible, Arduino Mega en este caso, para alojar y ejecutar el código del sistema. Esta placa actúa como el cerebro del sistema, coordinando todas las funciones y procesos.
 
-> #####**<center>Matrices LED de 8x8</center>**
+> **<center>Matrices LED de 8x8</center>**
 >Cuatro matrices LED de 8x8 se utilizan para la visualización las respuestas o códigos de error de cálculos matemáticos, en la calculadora. Estas matrices proporcionan una interfaz visual clara y son controladas directamente por el Arduino.
 
-> #####**<center>Teclado Matricial</center>**
+> **<center>Teclado Matricial</center>**
 >Un teclado matricial se emplea como dispositivo de entrada para el sistema. Este teclado permite al usuario ingresar caracteres alfanuméricos y ejecutar comandos específicos, como cambiar la contraseña o validar una entrada.
 
-> #####**<center>Switchs de Control</center>**
+> **<center>Switchs de Control</center>**
 >Se utilizan switchs , como pulsadores, para activar funciones específicas del sistema, como el cambio entre el modo de seguridad y el modo de calculadora, así como el bloqueo del sistema.
 
-> #####**<center>Componentes de Visualización</center>**
+> **<center>Componentes de Visualización</center>**
 >Además de las matrices LED, se emplean LEDs individuales para indicar el estado del sistema, como la validación de la contraseña o el bloqueo temporal tras múltiples intentos fallidos.
 
-> #####**<center>Potenciómetro</center>**
+> **<center>Potenciómetro</center>**
 > Un potenciómetro se utiliza para controlar la velocidad de desplazamiento de los mensajes en las matrices LED durante la operación en el modo de visualización.
 
 *Es esencial asegurarse de contar con todos estos componentes y de seguir las conexiones adecuadas según las especificaciones del sistema para garantizar un funcionamiento óptimo y seguro del sistema de seguridad y calculadora implementado.*
 
 ---
 
-> ###**<center>Estructura del Sistema</center>**
+> **<center>Estructura del Sistema</center>**
 > <img src="https://i.ibb.co/5TQBmS8/image.png">
 >
 > *<center>Imagen del circuito completo <center>*
@@ -72,14 +72,14 @@ El sistema se basa en la plataforma Arduino y utiliza una serie de componentes e
 
 ---
 
->###**<center>Funcionamiento del Sistema</center>**
+>**<center>Funcionamiento del Sistema</center>**
 >
->#####*<center>Funcionamiento del Sistema</center>*
+>*<center>Funcionamiento del Sistema</center>*
 >(aquí explicar tanto las conexiones en proteus como el codigo)
 > 
 > ---
 >
->#####*<center>Calculadora</center>*
+>*<center>Calculadora</center>*
 >El sistema de control de matrices LED 8x8 utiliza la librería Parola para interactuar con cuatro matrices LED utilizando el chip controlador MAX7219
 >
 > - **Implementa:**
@@ -122,12 +122,12 @@ El sistema se basa en la plataforma Arduino y utiliza una serie de componentes e
 >
 > ---
 >
->#####*<center>Impresión en Matrices</center>*
+>*<center>Impresión en Matrices</center>*
 >(aquí explicar tanto las conexiones en proteus como el codigo)
 > 
 > ---
 >
->#####*<center>Impresión en consola</center>*
+>*<center>Impresión en consola</center>*
 >(aquí explicar tanto las conexiones en proteus como el codigo)
 
 <img src="">
