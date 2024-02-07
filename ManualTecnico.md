@@ -136,13 +136,13 @@ El sistema se basa en la plataforma Arduino y utiliza una serie de componentes e
 <img src="./Practica1_code/assets/leds.PNG">
 </div>
 
->#####Inicializacion de la matriz LEDS:
+>##### Inicializacion de la matriz LEDS:
 >Se define el hadware y se inicaliza la matriz de LEDS, con la funcion MD_Parolay MD_MAX72xx. Se especifican los pines para el reloj(CLK_PIN), datos(DATA_PIN) y de chip (CS_PIN).
 
 ```Codigo:
 >MD_Parola P = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
 ```
->#####Definicion de la animacion y velocidad de desplazamiento:
+>##### Definicion de la animacion y velocidad de desplazamiento:
 >Se definen los parametros de velocidad para el desplazamiento del resultado (scrollSpeed), el efecto de desplazamiento (scrollSpeed)la pausa del desplazamiento y la alinación del texto.
 
 ```Codigo:
@@ -151,7 +151,7 @@ textEffect_t scrollEffect = PA_SCROLL_LEFT;
 textPosition_t scrollAlign = PA_LEFT;
 uint16_t scrollPause = 0;
 ```
->#####Lectura de la entrada serial:
+>##### Lectura de la entrada serial:
 >Se lee la entrada serial para recibir mensaje que se mostrarán en la matriz de LEDS.
 
 ```Codigo:
@@ -177,7 +177,7 @@ uint16_t scrollPause = 0;
 <img src="./Practica1_code/assets/captureSerial.PNG">
 </div>
 
->#####Manejo de le entrada del teclado:
+>##### Manejo de le entrada del teclado:
 >Se utiliza la biblioteca Keypad para leer los datos de un teclado matricial 4*4. Se construye una expresion matematica a partir de la entrada del teclado y se evalúa para mostrar el resultado en la matriz LEDS.
 
 ```Codigo:
