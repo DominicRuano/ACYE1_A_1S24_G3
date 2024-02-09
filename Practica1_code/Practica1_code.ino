@@ -175,6 +175,8 @@ void PrintInMatrix(String mensaje){
 
                 //CONDIGO DE LA CALCULADORA HERE!!!!!!
 
+              Serial.println("MODO CALCULADORA");
+
               }
               delay(50);  // Retardo pequeño para evitar rebotes del switch
             }

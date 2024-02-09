@@ -13,8 +13,8 @@
    - 2021000096 🆔
 3. Angela María Esther Escobar Alvarez
    - 202100019 🆔
-4. Copiar esto y poner su info
-   - carne 🆔
+4. Ludwing Alexander López Oriz
+   - 201907608 🆔
 ```
 
 ---
@@ -87,6 +87,186 @@ El sistema se basa en la plataforma Arduino y utiliza una serie de componentes e
 >(aquí explicar tanto las conexiones en proteus como el codigo)
 > 
 > ---
+
+**<center>  SISTEMA DE SEGURIDAD <center>**
+*<center>  FUNCIONAMIENTO INICIO Y ENTRADA <center>*
+
+<div div style='text-align: center;'>
+<img src="./Practica1_code/assets/KEYBOARD.JPG">
+</div>
+
+##### INGRESO DE CONTRASEÑA:
+
+>Al inciar el programa este mestra un mensaje en consola el cual permite que 
+el usuario digite por medio de un keypad una contraseña inicial. Esta contra-
+seña es luego verificada por el sistema de confirmacion de pasword y permite
+el acceso en caso de ser correcta. Este sistema cuenta con una contraseña por
+defeto la cual es "AC6C6124" La cual puede ser modificada luego al ingresar en
+el sistema.
+
+<div div style='text-align: center;'>
+<img src="./Practica1_code/assets/CONSOL.JPG">
+</div>
+
+<div div style='text-align: center;'>
+    <img src="./Practica1_code/assets/VERIFY.JPG">
+    </div>
+
+##### CAMBIO DE CONTRASEÑA:
+
+> Cuando se accede al sistema este permite a su vez poder modificar por medio de la tecla "*" la contraseña actual, solicitando una nueva contraseña ingresada por el usuario.
+
+<div div style='text-align: center;'>
+<img src="./Practica1_code/assets/CAHNGE.JPG">
+</div>
+
+##### MODO ALERTA:
+
+>Al momento de accesar  veces de manera incorrecta, ingresando una contraseña no valida, el sistema encendera una alerta led por cada intento fallido, llegando al tercer intento el sistema se bloqueara por quince segundos y luego se reiniciara.
+
+<div div style='text-align: center;'>
+<img src="./Practica1_code/assets/ALERT.JPG">
+</div>
+
+##### CAMBIO MODO CALCULADORA:
+
+>Al momento de accesar de manera correcta por medio de un switch se accede al modo calculadora.
+
+<div div style='text-align: center;'>
+<img src="./Practica1_code/assets/SWITCH.JPG">
+</div>
+
+
+```Codigo:
+    //CODIGO FUNCION PARA SISTEMA DE SEGURIDAD
+
+ void SistemaDeSeguridad(){
+
+  char Ingreso = teclado.getKey(); // VARIABLE QUE CAPTURA LA ENTRADA DE CARACTERES POR MEDIO DEL KEYPAD
+
+  if (Entradas == 0){ //MENSAJE DE BIENVENIDA AL USUARIO
+    Serial.println("||----BIENVENIDO USUARIO DEL GRUPO 6----||");
+    Serial.print("INGRESE LA CONTRASEA: ");
+    Entradas +=1;
+  }
+
+  while (true){
+
+    Ingreso = teclado.getKey();
+
+    if (Ingreso){ //COMPROBACION DE QUE NO SE HA INGRESADO NADA DENTRO DE LA VARIABLE
+
+    if (Ingreso == '#'){ //UTILIZANDO EL SIGNO * COMO ENTER PARA PODER INGRESAR CONTRASEÑA
+      Serial.println();
+      Serial.print("CONTRASEÑA INGRESADA: ");
+      Serial.println(Entrada);
+      
+      if (Entrada == Pasword){
+        Serial.println("||---- BIENVENIDO!----||"); //SI LA CONTRASEÑA ES CORRECTA DA MENSAJE DE BIENVENIDA
+        
+        while (salida){
+
+          char key = teclado.getKey();
+
+          switchState = digitalRead(switchPin);  // Lee el estado actual del switch
+
+            // Verifica si el estado del switch ha cambiado
+            if (switchState != lastSwitchState) {
+              // Si el switch ha sido presionado, Cambia el estado a calculadora
+              if (switchState == HIGH) {
+
+                //CONDIGO DE LA CALCULADORA HERE!!!!!!
+
+              Serial.println("MODO CALCULADORA");
+
+              }
+              delay(50);  // Retardo pequeño para evitar rebotes del switch
+            }
+
+            // Almacena el estado actual del switch para la próxima iteración
+            lastSwitchState = switchState;
+          
+
+          if (key == '*') { // cambio de contraseña
+            Serial.print("INGRESE NUEVA CONTRASEÑA: ");
+
+            Pasword = ""; // limpiar la nueva contraseña
+
+            while (true) {
+              key = teclado.getKey();
+
+              if (key == '#') { //ACEPTAR NUEVA CONTRASEÑA
+                if (Pasword.length() >= 6 && Pasword.length() <= 8) { //COMPROBACION TAMAÑO CORRECTO DE LA NUEVA CONTRASEÑA
+                  Serial.println();
+                  Serial.println("Nueva Contraseña: " + Pasword); //MOSTRAR CAMBIO DE CONTRASEÑA
+                  break; //SALIR DEL BUCLE DE CREADO CONTRASEÑA
+                } else {
+                  Serial.println();
+                  Serial.println("TAMAÑO DE LA CONTRASEÑA INCORRECTO!"); //AVISO DE CONTRASEÑA INCORRECTA
+                  Serial.println("Longitud actual: " + String(Pasword.length())); //MOSTRAR TAMAÑO CONTRASEÑA
+                }
+              } else if (key != NO_KEY) {
+                Pasword += key; // Solo concatenar si se presiona una tecla válida
+                Serial.print(key);
+              }
+            }
+
+            salida = false;
+          }
+          
+        }    
+
+      }else{
+        Serial.println("CONTRASEÑA INGRESADA ES INCORRECTA!"); //AVISO CONTRASEÑA INCORRECTA
+        IntentosEntrada +=1; //AUMENTO DE INTENTO ENTRADAS
+
+        if (IntentosEntrada == 1){
+          
+          digitalWrite(ledPin1, HIGH);//encender led
+
+        }else if (IntentosEntrada == 2){
+
+          digitalWrite(ledPin2, HIGH);
+
+        }else if (IntentosEntrada == 3){
+
+          digitalWrite(ledPin3, HIGH);
+
+          Serial.println("NIÑO MALO, TE TOCA ESPERAR 15 SEGUNDOS >:) ");
+
+          delay(15000); //TIEMPO ENSEPERA DE MALAL CONTRASEÑA
+          
+          digitalWrite(ledPin1, LOW); //APAGAR EL LED
+          digitalWrite(ledPin2, LOW);
+          digitalWrite(ledPin3, LOW);
+
+          IntentosEntrada = 0; //reinicio intentos de entrar en el sistema
+
+          
+
+        }
+
+        Serial.println("INGRESE LA CONTRASEA: ");
+      }      
+
+      Entrada =""; //LIMPIEZA DE VARIABLE DE CONTRASEÑA 
+    } else{
+      Entrada += String(Ingreso); //INGRESO DE CONTRASEÑA A CADENA DE TEXTO
+      Serial.print("*"); //MOSTRAR DATO INGRESADO DE MANERA INCOGNITA
+    }
+    
+
+  }
+
+
+  }
+  
+
+
+ }
+
+```
+
 >
 >*<center>Calculadora</center>*
 >El sistema de control de matrices LED 8x8 utiliza la librería Parola para interactuar con cuatro matrices LED utilizando el chip controlador MAX7219
