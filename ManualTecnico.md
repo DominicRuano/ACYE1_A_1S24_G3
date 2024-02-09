@@ -430,7 +430,16 @@ uint16_t scrollPause = 0;
 > ---
 >
 >*<center>Impresión en consola</center>*
->(aquí explicar tanto las conexiones en proteus como el codigo)
+>Se incluyen las bibliotecas necesarias para el teclado matricial y la pantalla LCD.
+Se definen los pines del teclado matricial y se crea un objeto Keypad.
+Se definen los pines de la pantalla LCD y se crea un objeto LiquidCrystal.
+Se establecen variables para almacenar los operandos, el operador y la entrada del teclado.
+En setup(), se inicializa la pantalla LCD con un mensaje de bienvenida.
+En loop(), se lee la tecla presionada y se realiza la lógica de la calculadora:
+Si se presiona un operador, se almacena el primer número y el operador.
+Si se presiona '=', se calcula el resultado final y se muestra en la pantalla LCD.
+Si se presiona 'C', se borra la entrada actual.
+Si se presiona un dígito, se agrega a la entrada actual.
 
 <img src="">
 
